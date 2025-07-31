@@ -2,16 +2,74 @@
 Retrives a given user's groups and the policy statements for that group.
 Created using Claude Sonnet 4 on claude.ai using the "Vibe Code with me" initial prompt.
 
-Requirements:
+## Requirements:
 * Python 3
 * OCI Python SDK (```pip install oci```)
 
-## Prompt
+## Example:
+```
+Connected to tenancy: ocid1.tenancy.oc1..aaaaaaaazvw...ohq
+
+=== OCI Policy Analysis for User: ocid1.user.oc1..aaaaaaaamys...exq ===
+
+Fetching groups for user: ocid1.user.oc1..aaaaaaaamys...exq
+User belongs to 5 groups:
+  - JC IAM Administrators (ocid1.group.oc1..aaaaaaaat3y...6fq)
+  - Administrators (ocid1.group.oc1..aaaaaaaamy...skq)
+  - functions (ocid1.group.oc1..aaaaaaaaolb...faa)
+  - oic_admin (ocid1.group.oc1..aaaaaaaaqqe...vva)
+  - Datasync (ocid1.group.oc1..aaaaaaaaydi...wnq)
+Fetching all compartments...
+Found 22 compartments
+
+Scanning policies in 23 compartments...
+
+Found 12 policy statements that apply to this user:
+
+================================================================================
+
+Policy: ai_agent
+Compartment: root
+----------------------------------------
+  allow group Datasync to manage object-family in compartment sandbox
+
+Policy: Billing
+Compartment: root
+----------------------------------------
+  endorse group Administrators to manage objects in tenancy usage-report
+
+Policy: logging_analytics_automatic_service_policies
+Compartment: root
+----------------------------------------
+  endorse group Administrators to read loganalytics-features-family in tenancy sampledata
+  endorse group Administrators to read loganalytics-resources-family in tenancy sampledata
+  endorse group Administrators to read compartments in tenancy sampledata
+
+Policy: MailDelivery
+Compartment: root
+----------------------------------------
+  Allow group Administrators to use email-family in tenancy
+  Allow group Administrators to manage credentials in tenancy where target.credential.type = 'smtp'
+  Allow group Administrators to manage email-family in tenancy
+  Allow group Administrators to manage suppressions in tenancy
+  Allow group Administrators to manage log-groups in tenancy
+  Allow group Administrators to read log-content in tenancy
+
+Policy: Tenant Admin Policy
+Compartment: root
+----------------------------------------
+  ALLOW GROUP Administrators to manage all-resources IN TENANCY
+
+================================================================================
+Analysis complete. Total statements: 12
+```
+## Claude Chat
+### Prompt
 Hi Claude! Could you vibe code with me? If you need more information from me, ask me 1-2 key questions right away. If you think I should upload any documents that would help you do a better job, let me know. You can use the tools you have access to — like Google Drive, web search, etc. — if they’ll help you better accomplish this task. Do not use analysis tool. Please keep your responses friendly, brief and conversational. 
 
 Please execute the task as soon as you can - an artifact would be great if it makes sense. If using an artifact, consider what kind of artifact (interactive, visual, checklist, etc.) might be most helpful for this specific task. Thanks for your help!
 
-## Response
+### Response
 > Hey! I'd love to vibe code with you! 🚀
 > Just need a couple quick questions to get us rolling:
 > What are we building? (web app, game, data viz, utility script, etc.)
@@ -20,7 +78,7 @@ Please execute the task as soon as you can - an artifact would be great if it ma
 > I'm ready to jump into an artifact as soon as I know what direction we're heading! Whether it's React, vanilla JS, Python, or whatever language fits the mood.
 What's calling to you today?
 
-## Prompt
+### Prompt
 We are building a utility script for OCI. We are going to be creating some functionality in python that augments the OCI Python SDK.
 
 I need to be able to generate a list of policy statements that apply to a given user in OCI. The Python script should be able to take a username, typically an email address, look up the groups that are associated with that user, and from those groups, print out the policy statements.
@@ -29,7 +87,7 @@ Whenever possible, the script should work to translate OCIDs returned from the A
 
 Don't start this task until you've asked enough clarifying questions to feel 95% confident you'll get it right.
 
-## Response
+### Response
 > Nice! An OCI policy auditing tool - that's super useful. Let me ask a few key questions to nail this:
 > 1. Authentication approach - Are you planning to use:
 >    * Config file (~/.oci/config)?
@@ -55,14 +113,14 @@ Don't start this task until you've asked enough clarifying questions to feel 95%
 > 
 > Once I know these details, I can build you a solid script that'll save you tons of time!
 
-## Prompt
+### Prompt
 1. We will use ~/.oci/config
 2. Let's use the given User's OCID
 3. Let's output the raw policy statements in plain text for now
 4. This should look for all policy statements in all compartments
 5. In a given policy statement, OCIDs may be given for compartment id. We should look up the name of the compartment and substitue that in the printed policy statement
 
-## Response
+### Response
 > Perfect! That's exactly what I need. Let me build you a script that:
 >  * Uses ~/.oci/config for auth
 >  * Takes a user OCID as input
